@@ -1,0 +1,28 @@
+html
+    head
+        title= title
+        link(rel="stylesheet", href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css")
+        body.container
+            h2 Register new account
+            p Please fill all the details
+            form(method="POST").form-group
+                lable(for="firstName") First Name
+                input(type="text" name="firstName" placeholder="Enter your First Name").form-control
+                br
+                lable(for="lastName") Last Name
+                input(type="text" name="lastName" placeholder="Enter your Last Name").form-control
+                br
+                lable(for="username") Username
+                input(type="text" name="username" placeholder="Enter your Username").form-control
+                br
+                lable(for="email") Email
+                input(type="text" name="email" placeholder="Enter email address").form-control
+                br
+                lable(for="password") New password
+                input(type="password" name="password" placeholder="Enter your new password").form-control
+                br
+                lable(for="password") Confirm new password
+                input(type="password" name="password" placeholder="Type your new password again").form-control
+                br
+                input(type="submit" value="Sign Up").btn.btn-primary
+                
