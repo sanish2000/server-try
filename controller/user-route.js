@@ -12,11 +12,28 @@ function connect(cb) {
     })
 }
 
-
-
 Route.get('/', function (req, res, next) {
-    connect
+    res.end('You are at home page')
 })
+
+
+Route.route('/')
+    .get(function (req, res, next) {
+        connect(function (err, db) {
+            if (err) {
+                return next(err)
+            }
+            var condition = {};
+            db.collection('users')
+                .find(condition)
+                .toArray(function(err,users){
+                    if(err){
+                        return next(err)
+                    }
+                    res.status(200).json(users)
+                })
+        })
+    })
 
 
 

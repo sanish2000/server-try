@@ -1,10 +1,16 @@
 const Route = require('express').Router();
-const Mongodb = require('mongodb');
-const Client = Mongodb.MongoClient;
-const ConxnURL = 'mongodb://127.0.0.1:27017';
-const DbName = 'group21db';
-const ColName = 'users';
+const Dbconfig = require('./../configs/db-config')
 
+// function connect(cb) {
+//     Dbconfig.Client.connect(Dbconfig.ConxnURL, function (err, client) {
+//         if (err) {
+//             cb(err)
+//         }
+//         else {
+//             cb(null, client);
+//         }
+//     })
+// }
 
 Route.get('/', function (req, res, next) {
     res.end('You are at home page')
