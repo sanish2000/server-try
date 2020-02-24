@@ -2,8 +2,9 @@ const Express = require('express');
 const App = Express();
 var port = 3030;
 const Path = require('path');
-const NewRouter = require('./controller/middleware');
+const NewRouter = require('./controller/main-route');
 const UserRouter = require('./controller/user-route');
+require('./db'); 
 
 
 
