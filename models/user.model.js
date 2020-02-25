@@ -5,18 +5,18 @@ const UserSchema = new Schema({
     name: String,
     username: {
         type: String,
-        require: true,
+        required: true,
         unique: true,
         lowercase: true,
         trim: true
     },
     password: {
         type: String,
-        require: true
+        required: true
     },
     email: {
         type: String,
-        unique: true,
+        uniqued: true,
         sparse: true
     },
     phoneNumber: Number,
@@ -36,7 +36,10 @@ const UserSchema = new Schema({
     role: {
         type: Number, //1.admin //2.user
         default: 2
-    }
+    },
+    image:String
+},{
+    timestamps:true
 })
 
 const UserModel = Mongoose.model('user', UserSchema)

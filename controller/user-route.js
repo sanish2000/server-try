@@ -1,5 +1,6 @@
 const Route = require('express').Router();
 const UserModel = require('./../models/user.model')
+const map_user_req = require('./../helper/map_user_req')
 
 
 
@@ -55,6 +56,8 @@ Route.route('/:id')
     })
     .put(function (req, res, next) {
         var id = req.params.id;
+        const data = req.body;
+
         UserModel.findById(id, function (err, user) {
             if (err) {
                 return next(err);
@@ -65,34 +68,10 @@ Route.route('/:id')
                     status: 404
                 });
             }
-            const data = req.body;
 
-            if (data.name)
-                user.name = data.name;
-            if (data.username)
-                user.username = data.username;
-            if (data.password)
-                user.password = data.password;
-            if (data.email)
-                user.email = data.email;
-            if (data.dob)
-                user.dob = data.dob;
-            if (data.gender)
-                user.gender = data.gender;
-            if (data.permanenet_address)
-                user.address.permanent_address = data.permanent_address;
-            if (data.temp_address)
-                user.address.temp_address = data.temp_address.split(',');
-            if (data.phoneNumber)
-                user.phoneNumber = data.phoneNumber;
-            if (data.status)
-                user.status = true;
-            if (data.inActiveStatus)
-                user.status = false;
-            if (data.role)
-                user.role = data.role;
+            var updatedUser = map_user_req(user,data);
 
-            user.save(function (err, updated) {
+            updatedUser.save(function (err, updated) {
                 if (err) {
                     return next(err)
                 }
