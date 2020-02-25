@@ -3,17 +3,24 @@ const UserModel = require('./../models/user.model')
 const map_user_req = require('./../helper/map_user_req')
 const PasswordHash = require('password-hash');
 const Multer = require('multer');
+const fs = require('fs');
+const path = require('path')
+
 // const Upload = Multer({
 //     dest: './uploads'
 // })
 var myStorage = Multer.diskStorage({
-    filename:function(req,file,cb){
-        cb(null,Date.now() +'-' + file.originalname)
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + '-' + file.originalname)
     },
-    destination: function(req,file,cb){
-        cb(null,'./uploads/images')
+    destination: function (req, file, cb) {
+        cb(null, './uploads/images')
     }
 });
+
+function filter(req, file, cb) {
+
+}
 var Upload = Multer({
     storage: myStorage
 })
@@ -49,11 +56,28 @@ Route.post('/login', function (req, res, next) {
 
 
 Route.post('/register', Upload.single('img'), function (req, res, next) {
-    console.log('req.file>>>',req.file)
-    console.log('req.body>>>',req.body)
+    console.log('req.file>>>', req.file);
+    console.log('req.body>>>', req.body);
+    console.log('dirname>>>', dirname);
+    console.log('process.cwd()', process.cwd());
+    if (req.file) {
+        var mimeType = req.file.mimetype.split('/')[0];
+        if (mimeType != 'image') {
+            fs.unlink(path.join(process.cwd(), 'Uploads/images/' + req.file.filename), function (err, done) {
+                if (err) {
+                    console.log('err', err);
+                } else {
+                    console.log('file removed');
+                }
+            });
+            return next({
+                msg: "Invalid file format"
+            })
+        }
+    }
 
     const data = req.body;
-    if(req.file){
+    if (req.file) {
         data.image = req.file.filename;
     }
     var newUser = new UserModel({});
