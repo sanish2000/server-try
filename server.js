@@ -2,10 +2,11 @@ const Express = require('express');
 const App = Express();
 var port = 3030;
 const Path = require('path');
-const NewRouter = require('./controller/main-route');
-const UserRouter = require('./controller/user-route');
-require('./db'); 
+require('./db');
 
+
+//Import routing level middleware
+const API_ROUTE = require('./routes/api_routes')
 
 
 
@@ -22,10 +23,9 @@ App.use(Express.urlencoded({
 App.use(Express.json());
 
 
-//Routes
+//load routing level middleware
 
-App.use('/new', NewRouter)
-App.use('/user', UserRouter)
+App.use('/api', API_ROUTE);
 
 
 

@@ -1,6 +1,8 @@
 const Route = require('express').Router();
 const UserModel = require('./../models/user.model')
-const map_user_req = require('./../helper/map_user_req')
+const map_user_req = require('./../helper/map_user_req');
+const Upload = require('./../middlerwares/uploader')
+
 
 
 
@@ -54,10 +56,12 @@ Route.route('/:id')
                 next(err);
             })
     })
-    .put(function (req, res, next) {
+    .put(Upload.single('img'),function (req, res, next) {
         var id = req.params.id;
         const data = req.body;
-
+        if(req.file){
+            data.image = req.file.image
+        }
         UserModel.findById(id, function (err, user) {
             if (err) {
                 return next(err);
