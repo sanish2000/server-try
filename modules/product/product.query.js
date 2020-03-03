@@ -90,26 +90,19 @@ function update(id, data) {
                 if (!product) {
                     return reject({
                         msg: "product not found"
-                    });
+                    })
                 }
-                var oldImages = product.images;
-                var mappedUpdatedProduct = map_product_req(product, data)
+                var mappedUpdatedProduct = map_product_req(product, data);
                 mappedUpdatedProduct.save(function (err, updated) {
                     if (err) {
                         reject(err);
                     } else {
-                        resolve({
-                            oldImages,
-                            updated
-                        });
+                        resolve(updated)
                     }
-                });
-
-            });
-    });
-
+                })
+            })
+    })
 }
-
 
 function remove(id) {
     return ProductModel.findByIdAndRemove(id);
