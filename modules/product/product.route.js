@@ -11,8 +11,8 @@ Router.route('/search')
 
 Router.route('/:id')
     .get(ProductControl.getById)
-    .put(ProductControl.getById)
-    .delete(ProductControl.getById);
+    .put(ProductControl.put)
+    .delete(ProductControl.remove);
 
 
 module.exports = Router 

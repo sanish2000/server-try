@@ -28,16 +28,47 @@ function map_product_req(product, productDetails) {
     if (productDetails.images)
         product.images = productDetails.images;
     if (productDetails.tags)
-        product.tags = productDetails.tags.split(',');
+        product.tags = typeof (productDetails) === "String"
+            ? productDetails.tags.split(',')
+            : productDetails.tags
+    if (productDetails.offers)
+        product.offers = typeof (productDetails) === "String"
+            ? productDetails.offers.split(',')
+            : productDetails.offers
+    if (product.discount || productDetails.discountedItem == 'true') {
+        // note data received from postman(x-www-form-urlencoded) will be in string
+        if (!product.discount) {
+            // for insert
+            product.discount = {};
+        }
+        // for update
+        product.discount.discountedItem = productDetails.discountedItem == 'true' ?
+            true :
+            false;
+        if (productDetails.discountedType)
+            product.discount.discountedType = productDetails.discountedType;
+        if (productDetails.discount)
+            product.discount.discount = productDetails.discount;
+    }
 
+
+    if (productDetails.warrantyItem == 'true') {
+        // note data received from postman(x-www-form-urlencoded) will be in string
+        product.warranty = {};
+        product.warranty.warrantyItem = productDetails.warrantyItem;
+        product.warranty.warrantyPeriod = productDetails.warrantyPeriod;
+    }
 
     return productDetails;
 
 }
 
 function find(condition) {
-    ProductModel
+    return ProductModel
         .find(condition)
+        .sort({
+            _id: -1
+        })
         .exec();
 }
 
@@ -59,22 +90,29 @@ function update(id, data) {
                 if (!product) {
                     return reject({
                         msg: "product not found"
-                    })
+                    });
                 }
+                var oldImages = product.images;
                 var mappedUpdatedProduct = map_product_req(product, data)
                 mappedUpdatedProduct.save(function (err, updated) {
                     if (err) {
                         reject(err);
                     } else {
-                        resolve(updated)
+                        resolve({
+                            oldImages,
+                            updated
+                        });
                     }
-                })
-            })
-    })
+                });
+
+            });
+    });
+
 }
 
-function remove(id) {
 
+function remove(id) {
+    return ProductModel.findByIdAndRemove(id);
 }
 
 module.exports = {

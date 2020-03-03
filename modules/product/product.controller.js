@@ -24,18 +24,18 @@ function post(req, res, next) {
             next(err)
         })
 }
-
 function getById(req, res, next) {
     var condition = { _id: req.params.id };
     ProductQuery
         .find(condition)
         .then(function (data) {
-            res.status(200), json(data[0]);
+            res.status(200).json(data[0]);
         })
         .catch(function (err) {
-            next(err)
+            next(err);
         })
 }
+
 
 function search(req, res, next) {
     const searchCondition = {};
@@ -63,6 +63,18 @@ function put(req, res, next) {
 
 }
 
+function remove(req, res, next) {
+    ProductQuery
+        .remove(req.params.id)
+        .then(function (data) {
+            res.status(200).json(data);
+        })
+        .catch(function (err) {
+            next(err);
+        });
+}
+
+
 
 
 
@@ -74,5 +86,6 @@ module.exports = {
     getById,
     post,
     search,
-    put
+    put,
+    remove
 }
