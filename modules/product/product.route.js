@@ -8,6 +8,8 @@ Router.route('/')
 
 Router.route('/search')
     .get(ProductControl.search)
+    .post(ProductControl.search);
+
 
 Router.route('/:id')
     .get(ProductControl.getById)

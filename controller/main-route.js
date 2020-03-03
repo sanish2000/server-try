@@ -5,25 +5,19 @@ const PasswordHash = require('password-hash');
 const fs = require('fs');
 const path = require('path')
 const Upload = require('./../middlerwares/uploader')
-
-// const Multer = require('multer');
-
-// // const Upload = Multer({
-// //     dest: './uploads'
-// // })
-// var myStorage = Multer.diskStorage({
-//     filename: function (req, file, cb) {
-//         cb(null, Date.now() + '-' + file.originalname)
-//     },
-//     destination: function (req, file, cb) {
-//         cb(null, './uploads/images')
-//     }
-// });
+const JWT = require('jsonwebtoken');
+const Config = require('./../configs/index')
 
 
-// var Upload = Multer({
-//     storage: myStorage,
-// })
+function createToken(data) {
+    var token = JWT.sign({
+        _id: data._id,
+        role: data.role,
+        username: data.username
+
+    }, Config.jwt_secret);
+    return token;
+}
 
 
 Route.post('/login', function (req, res, next) {
@@ -35,7 +29,11 @@ Route.post('/login', function (req, res, next) {
                 //password Verification
                 var isMatched = PasswordHash.verify(req.body.password, user.password);
                 if (isMatched) {
-                    res.status(200).json(user);
+                    var token = createToken(user);
+                    res.status(200).json({
+                        user: user,
+                        token: token
+                    });
                 } else {
                     next({
                         msg: 'Invalid Password'
@@ -60,15 +58,15 @@ Route.post('/register', Upload.single('img'), function (req, res, next) {
     // console.log('req.body>>>', req.body);
     // console.log('dirname>>>', __dirname);
     // console.log('process.cwd()', process.cwd());
-    if(req.fileErr){
+    if (req.fileErr) {
         return next({
-            msg:'Invalid file formate'
+            msg: 'Invalid file formate'
         })
     }
 
     //---------############code to use withouse using filter##########-----------
 
-    
+
     // if (req.file) {
     //     var mimeType = req.file.mimetype.split('/')[0];
     //     if (mimeType !== 'image') {

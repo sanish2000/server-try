@@ -1,5 +1,5 @@
 const Router = require('express').Router();
-
+const authenticate = require('./../middlerwares/authenticate');
 
 // load application route
 
@@ -13,7 +13,7 @@ const ProductRoute = require('./../modules/product/product.route')
 //Routes
 
 Router.use('/new', NewRoute);
-Router.use('/user', UserRoute);
-Router.use('/product', ProductRoute);
+Router.use('/user',authenticate, UserRoute);
+Router.use('/product',authenticate, ProductRoute);
 
 module.exports = Router

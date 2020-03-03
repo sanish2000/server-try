@@ -3,7 +3,7 @@ const Schema = Mongoose.Schema;
 
 const reviewSchema = new Schema({
     point: Number,
-    messages: String,
+    message: String,
     user: {
         type: Schema.Types.ObjectId,
         ref: 'user'

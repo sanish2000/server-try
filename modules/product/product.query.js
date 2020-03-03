@@ -58,8 +58,17 @@ function map_product_req(product, productDetails) {
         product.warranty.warrantyItem = productDetails.warrantyItem;
         product.warranty.warrantyPeriod = productDetails.warrantyPeriod;
     }
+    if (productDetails.reviewPoint && productDetails.reviewMessage) {
+        let reviews = {
+            point: productDetails.reviewPoint,
+            message: productDetails.reviewMessage,
+            user: productDetails.user
+        };
+        product.reviews.push(reviews);
+    }
 
-    return productDetails;
+
+    return product;
 
 }
 
@@ -112,5 +121,6 @@ module.exports = {
     find,
     insert,
     update,
-    remove
+    remove,
+    map_product_req
 }

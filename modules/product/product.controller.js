@@ -38,17 +38,21 @@ function getById(req, res, next) {
 
 
 function search(req, res, next) {
-    const searchCondition = {};
+    const condition = {};
+    const data = req.body;
+    const searchCondition = ProductQuery.map_product_req(condition, data);
+    console.log('search condition >>', searchCondition);
 
     ProductQuery
-        .find(searchCondition)
+        .find(searchCondition, req.query)
         .then(function (data) {
-            res.status(200), json(data);
+            res.status(200).json(data);
         })
         .catch(function (err) {
-            next(err)
+            next(err);
         })
 }
+
 
 function put(req, res, next) {
     const data = req.body;
